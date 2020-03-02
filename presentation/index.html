@@ -1,0 +1,168 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+
+  <title>reveal.js</title>
+
+  <link href="css/reset.css" rel="stylesheet">
+  <link href="css/reveal.css" rel="stylesheet">
+  <link href="css/theme/solarized.css" rel="stylesheet">
+
+  <!-- Theme used for syntax highlighting of code -->
+  <link href="lib/css/monokai.css" rel="stylesheet">
+
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+    document.getElementsByTagName('head')[0].appendChild(link);
+  </script>
+</head>
+<body>
+<div class="reveal">
+  <div class="slides">
+    <section data-markdown>
+					<textarea data-template>
+						# Redux, Reselect and _you_!
+					</textarea>
+    </section>
+    <section data-markdown>
+			<textarea data-template>
+				## Redux
+				- Typesafe Actions
+				- Getting State (Hooks _vs_ Connect)
+				- Typings (State, Actions, Props)
+				- Redux Style Guide
+			</textarea>
+    </section>
+    <section data-markdown>
+			<textarea data-template>
+				### Typesafe Actions
+			</textarea>
+    </section>
+		<section data-markdown>
+			<textarea data-template>
+				### Getting State (Hooks _vs_ Connect)
+			</textarea>
+		</section>
+		<section data-markdown>
+			<textarea data-template>
+				### Typings (State, Actions, Props)
+			</textarea>
+    </section>
+		<section data-markdown>
+			<h4>Manual Types</h4>
+			<pre><code lass="hlts" data-line-numbers="4,8-11" data-trim data-noescape>
+				import { connect } from 'react-redux'
+
+				interface StateProps {
+				  isEnabled: boolean
+				}
+
+				interface DispatchProps {
+				  toggleEnabled: () => void
+				}
+
+				interface OwnProps {
+				  color: string
+				}
+
+				const mapState = (state: RootState) => ({
+				  isEnabled: state.isEnabled
+				})
+
+				const mapDispatch = {
+				  toggleEnabled: () => ({ type: 'TOGGLE_IS_ON' })
+				}
+
+				type Props = StateProps & DispatchProps & OwnProps
+
+				const Component: React.FunctionComponent&lt;Props&gt; = (props) => { }
+
+				export default connect&lt;StateProps, DispatchProps, OwnProps&gt;(
+				  mapState,
+				  mapDispatch
+				)(Component)
+			</code></pre>
+		</section>
+		<section>
+			<h4>Inferring Types</h4>
+			<pre><code data-trim data-noescape>
+				import { connect } from &apos;react-redux&apos;
+
+				const Component = (props: Props) => { }
+
+				const mapState = (state: RootState) => ({
+				  isEnabled: state.isEnabled
+				})
+
+				const mapDispatch = {
+				  toggleEnabled: () => ({ type: 'TOGGLE_IS_ON' })
+				}
+
+				const connector = connect(mapState, mapDispatch)
+
+				export type PropsFromRedux = <mark>ReturnType&lt;typeof connector&gt;</mark>
+
+				export default connect(mapState, mapDispatch)(Component)
+				</code></pre>
+
+		</section>
+		<section>
+			<section data-markdown>
+				<textarea data-template>
+					### Redux Style Guide
+				</textarea>
+			</section>
+			<section data-markdown>
+				<textarea data-template>
+					#### Model Actions as Events, not Setters
+
+					-
+					##### Motivation:
+					  - More meaningful action names and log history
+						- Fewer total actions being dispatched
+
+					[Reference](https://redux.js.org/style-guide/style-guide/#model-actions-as-events-not-setters)
+				</textarea>
+			</section>
+		</section>
+		<section data-markdown>
+			<textarea data-template>
+				## Reselect:
+				- Regular selectors
+				- Structured selectors
+				- Parametric selectors
+				- Memoization - How it works and how to break it
+				- Pure functions and mutation
+				- Using Selectors in Epics
+				- Testing
+			</textarea>
+    </section>
+		<section data-markdown>
+				<textarea data-template>
+				</textarea>
+    </section>
+
+  </div>
+</div>
+
+<script src="js/reveal.js"></script>
+
+<script>
+  Reveal.initialize({
+    hash: true,
+    dependencies: [
+      { src: 'plugin/markdown/marked.js' },
+      { src: 'plugin/markdown/markdown.js' },
+			{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+      { src: 'plugin/notes/notes.js', async: true },
+    ],
+  });
+</script>
+</body>
+</html>
